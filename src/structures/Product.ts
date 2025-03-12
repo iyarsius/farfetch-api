@@ -35,7 +35,7 @@ export class Product implements IProduct {
     labels?: ILabel[];
     isObsolete?: boolean;
     sizeGuide?: ISizeGuide;
-    fitting?: IFitting
+    fitting?: IFitting[]
 
     protected fetched = false;
 
