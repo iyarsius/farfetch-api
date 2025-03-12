@@ -59,7 +59,7 @@ export class Product implements IProduct {
         Object.assign(this, {
             ...data,
             sizeGuide: extraData.data.product.sizeGuide,
-            fitting: extraData.data.variation.fitting
+            fitting: extraData.data.variation.fitting || []
         });
     }
 }

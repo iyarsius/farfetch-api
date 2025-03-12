@@ -105,7 +105,7 @@ export class Farfetch {
         return new Product(this, {
             ...data,
             sizeGuide: extraData.data.product.sizeGuide,
-            fitting: extraData.data.variation.fitting
+            fitting: extraData.data.variation.fitting || []
         })
     };
 }
