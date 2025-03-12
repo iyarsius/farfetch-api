@@ -67,7 +67,7 @@ export class Farfetch {
         }).then(this._formatData);
 
         const term = terms[0];
-        if (term.type !== "Id") throw new Error("Invalid identifier");
+        if (term?.type !== "Id") throw new Error("Invalid identifier");
 
         const data = await fetch(`https://api.farfetch.net/v1/products/${term.value}`, {
             headers: this._getHeaders(),
