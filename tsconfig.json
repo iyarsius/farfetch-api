@@ -4,7 +4,7 @@
             "ESNext",
             "ES2021"
         ],
-        "module": "ESNext",
+        "module": "commonjs",
         "moduleResolution": "node",
         "target": "ESNext",
         "outDir": "dist",
