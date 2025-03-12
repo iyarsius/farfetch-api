@@ -1,0 +1,72 @@
+import { IAuthToken, IFarfetchOptions, ISearchParams } from "../types/Client";
+import { Product } from "./Product";
+
+export class Farfetch {
+    countryCode: string;
+    currencyCode: string;
+    authToken: IAuthToken;
+
+    constructor(options: IFarfetchOptions) {
+        this.countryCode = options.countryCode;
+        this.authToken = options.authToken;
+        this.currencyCode = options.currencyCode;
+    };
+
+    async _formatData(data: Response) {
+        if (data.status !== 200) throw new Error(`Error ${data.status}: ${data.statusText}`, {
+            cause: await data.json()
+        });
+
+        return await data.json() as any;
+    }
+
+    async connect() {
+        this.authToken = await fetch('https://auth.farfetch.net/connect/token', {
+            method: "POST",
+            body: new URLSearchParams({
+                grant_type: "GuestUser",
+                client_id: "19AB83A37D804711ACDBCFA643FE435D",
+                scope: "api"
+            }),
+        }).then(this._formatData);
+    }
+
+    async search(query: string, params?: ISearchParams): Promise<Product[]> {
+        const queryParams = new URLSearchParams({
+            q: encodeURIComponent(query),
+            page: params?.page || '1',
+            sort: params?.sort || 'rankings',
+            imagesSizes: params?.imagesSizes || "1920",
+            pageSize: params?.pageSize || "10",
+            fields: 'id,shortDescription,images,brand,gender,departmentId,isCustomizable,type,uploadedDate,tag,hasSimilarProducts'
+        });
+
+        const data = await fetch(`https://api.farfetch.net/v1/search/products?${queryParams}`, {
+            headers: {
+                authorization: this.authToken.token_type + " " + this.authToken.access_token,
+                "ff-currency": this.currencyCode,
+                "ff-country": this.countryCode
+            },
+        }).then(this._formatData);
+
+        // to ensure compatibility with details format
+        data.products.entries.map((p, i) => data.products.entries[i].images = { images: p.images });
+
+        return data.products.entries.map(p => new Product(this, p));
+    };
+
+    async get(identifier: string | number) {
+        const data = await fetch(`https://api.farfetch.net/v1/products/${identifier}`, {
+            headers: {
+                authorization: this.authToken.token_type + " " + this.authToken.access_token,
+                "ff-currency": this.currencyCode,
+                "ff-country": this.countryCode
+            }
+        }).then(this._formatData);
+
+        // so the product look alrady fetched
+        data.fetched = true;
+
+        return new Product(this, data)
+    };
+}
