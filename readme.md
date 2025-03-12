@@ -44,7 +44,8 @@ await product.fetchDetails();
 ```
 ### Get products by ID
 ```ts
-// Works only with farfetch internal ID
+// Works better with Farfetch internal ID,
+// but it can also work with another identifier like SKU
 const product = await farfetch.get(12345678)
 
 // Doesn't need to fetch details
