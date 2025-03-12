@@ -6,7 +6,6 @@
     "test": "ts-node test.ts",
     "build": "tsc && npm version patch"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
