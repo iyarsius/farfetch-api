@@ -14,15 +14,18 @@ export class Product implements IProduct {
     tag: string;
     hasSimilarProducts?: boolean;
 
+    measurements: any[] = []; // Assuming measurements can be of any type
+    compositions: IComposition[] = [];
+    categories: ICategory[] = [];
+    variants: IVariant[] = [];
+    care: ICare[];
+    colors: IColor[];
+    labels: ILabel[];
+    fitting: IFitting[]
+
     description?: string;
-    categories?: ICategory[];
-    variants?: IVariant[];
     season?: ISeason;
-    measurements?: any[]; // Assuming measurements can be of any type
-    compositions?: IComposition[];
     brandStyleId?: string;
-    care?: ICare[];
-    colors?: IColor[];
     isOnline?: boolean;
     hasParentProduct?: boolean;
     parentProductId?: number;
@@ -32,10 +35,8 @@ export class Product implements IProduct {
     styleId?: number;
     scaleId?: number;
     customization?: ICustomization;
-    labels?: ILabel[];
     isObsolete?: boolean;
     sizeGuide?: ISizeGuide;
-    fitting?: IFitting[]
 
     protected fetched = false;
 
