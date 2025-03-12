@@ -24,7 +24,7 @@ export class Farfetch {
         return {
             authorization: this.authToken.token_type + " " + this.authToken.access_token,
             "ff-currency": this.currencyCode,
-            "ff-country": this.countryCode
+            "ff-country": this.countryCode,
         };
     };
 
@@ -41,9 +41,9 @@ export class Farfetch {
 
     async search(query: string, params?: ISearchParams): Promise<Product[]> {
         const queryParams = new URLSearchParams({
-            q: encodeURIComponent(query),
+            q: query,
             page: params?.page || '1',
-            sort: params?.sort || 'rankings',
+            sort: params?.sort || 'ranking',
             imagesSizes: params?.imagesSizes || "1920",
             pageSize: params?.pageSize || "10",
             fields: 'id,shortDescription,images,brand,gender,departmentId,isCustomizable,type,uploadedDate,tag,hasSimilarProducts'
