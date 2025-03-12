@@ -33,7 +33,7 @@ export interface IProductDetails {
   customization: ICustomization;
   labels: ILabel[];
   isObsolete: boolean;
-  fitting: IFitting;
+  fitting: IFitting[];
   sizeGuide: ISizeGuide;
 }
 
