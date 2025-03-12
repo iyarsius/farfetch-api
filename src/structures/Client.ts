@@ -5,11 +5,13 @@ import { query } from "../queries/GetProductExtraDetails";
 export class Farfetch {
     countryCode: string;
     currencyCode: string;
+    languageCode: string;
     authToken: IAuthToken;
 
     constructor(options: IFarfetchOptions) {
         this.countryCode = options.countryCode;
         this.authToken = options.authToken;
+        this.languageCode = options.languageCode;
         this.currencyCode = options.currencyCode;
     };
 
@@ -26,7 +28,7 @@ export class Farfetch {
             authorization: this.authToken.token_type + " " + this.authToken.access_token,
             "ff-currency": this.currencyCode,
             "ff-country": this.countryCode,
-            "accept-language": `${this.countryCode}-${this.countryCode.toUpperCase()}`
+            "accept-language": this.languageCode
         };
     };
 

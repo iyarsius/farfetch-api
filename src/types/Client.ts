@@ -1,6 +1,7 @@
 export interface IFarfetchOptions {
     countryCode: string;
     currencyCode: string;
+    languageCode: string;
     authToken?: IAuthToken,
 }
 
