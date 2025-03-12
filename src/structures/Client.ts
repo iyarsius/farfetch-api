@@ -62,7 +62,8 @@ export class Farfetch {
 
     async get(identifier: string | number, params?: IGetPageParams) {
         const terms = await fetch(`https://api.farfetch.net/v1/search/stopwords?searchTerms=${identifier}`, {
-            headers: this._getHeaders()
+            headers: this._getHeaders(),
+            signal: params?.abortSignal
         }).then(this._formatData);
 
         const term = terms[0];
