@@ -6,7 +6,7 @@ The Farfetch api is a TypeScript module designed to scrape products data from th
 
 ## Installation
 
-To install the Farfetch Scraper module, run the following command:
+To install the Farfetch Api module, run the following command:
 
 ```bash
 npm install farfetch-api
@@ -14,7 +14,7 @@ npm install farfetch-api
 
 ## Usage
 
-Here is an example of how to use the Farfetch Scraper module:
+Here is an example of how to use the Farfetch Api module:
 
 ### Search for products
 
