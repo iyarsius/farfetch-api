@@ -179,5 +179,5 @@ export interface ISizeScale {
 export interface ISizeValue {
   value: string;
   position: number;
-  sizeID: number;
+  sizeId: number;
 };
