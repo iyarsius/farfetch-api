@@ -12,10 +12,10 @@ export interface IAuthToken {
 }
 
 export interface ISearchParams {
-    page: string,
-    sort: string,
-    imagesSizes: "300" | "500" | "600" | "700" | "800" | "1000" | "1920" | "2048",
-    pageSize: string,
+    page?: string,
+    sort?: string,
+    imagesSizes?: "300" | "500" | "600" | "700" | "800" | "1000" | "1920" | "2048",
+    pageSize?: string,
     abortSignal?: AbortSignal
 }
 
