@@ -26,6 +26,7 @@ export class Farfetch {
             authorization: this.authToken.token_type + " " + this.authToken.access_token,
             "ff-currency": this.currencyCode,
             "ff-country": this.countryCode,
+            "accept-language": `${this.countryCode}-${this.countryCode.toUpperCase()}`
         };
     };
 
@@ -36,7 +37,6 @@ export class Farfetch {
                 ...this._getHeaders(),
                 "x-request-operation-name": "pdpProduct",
                 "Content-Type": "application/json",
-                "accept-language": `${this.countryCode}-${this.countryCode.toUpperCase()}`,
             },
             body: JSON.stringify({
                 query: query,
