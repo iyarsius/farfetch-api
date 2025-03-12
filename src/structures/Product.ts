@@ -47,11 +47,7 @@ export class Product implements IProduct {
 
     async fetchDetails() {
         const data = await fetch(`https://api.farfetch.net/v1/products/${this.id}`, {
-            headers: {
-                authorization: this.client.authToken.token_type + " " + this.client.authToken.access_token,
-                "ff-currency": this.client.currencyCode,
-                "ff-country": this.client.countryCode
-            }
+            headers: this.client._getHeaders()
         }).then(this.client._formatData)
 
         Object.assign(this, data);

@@ -18,7 +18,15 @@ export class Farfetch {
         });
 
         return await data.json() as any;
-    }
+    };
+
+    _getHeaders() {
+        return {
+            authorization: this.authToken.token_type + " " + this.authToken.access_token,
+            "ff-currency": this.currencyCode,
+            "ff-country": this.countryCode
+        };
+    };
 
     async connect() {
         this.authToken = await fetch('https://auth.farfetch.net/connect/token', {
@@ -42,11 +50,7 @@ export class Farfetch {
         });
 
         const data = await fetch(`https://api.farfetch.net/v1/search/products?${queryParams}`, {
-            headers: {
-                authorization: this.authToken.token_type + " " + this.authToken.access_token,
-                "ff-currency": this.currencyCode,
-                "ff-country": this.countryCode,
-            },
+            headers: this._getHeaders(),
             signal: params?.abortSignal
         }).then(this._formatData);
 
@@ -57,12 +61,15 @@ export class Farfetch {
     };
 
     async get(identifier: string | number, params?: IGetPageParams) {
-        const data = await fetch(`https://api.farfetch.net/v1/products/${identifier}`, {
-            headers: {
-                authorization: this.authToken.token_type + " " + this.authToken.access_token,
-                "ff-currency": this.currencyCode,
-                "ff-country": this.countryCode
-            },
+        const terms = await fetch(`https://api.farfetch.net/v1/search/stopwords?searchTerms=${identifier}`, {
+            headers: this._getHeaders()
+        }).then(this._formatData);
+
+        const term = terms[0];
+        if (term.type !== "Id") throw new Error("Invalid identifier");
+
+        const data = await fetch(`https://api.farfetch.net/v1/products/${term.value}`, {
+            headers: this._getHeaders(),
             signal: params?.abortSignal
         }).then(this._formatData);
 
