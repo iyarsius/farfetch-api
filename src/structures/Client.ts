@@ -1,5 +1,6 @@
 import { IAuthToken, IFarfetchOptions, IGetPageParams, ISearchParams } from "../types/Client";
 import { Product } from "./Product";
+import { query } from "../queries/GetProductExtraDetails";
 
 export class Farfetch {
     countryCode: string;
@@ -26,6 +27,25 @@ export class Farfetch {
             "ff-currency": this.currencyCode,
             "ff-country": this.countryCode,
         };
+    };
+
+    protected async _fetchExtraData(id: number) {
+        return await fetch("https://marketplace.farfetch.net/graphql", {
+            method: "POST",
+            headers: {
+                ...this._getHeaders(),
+                "x-request-operation-name": "pdpProduct",
+                "Content-Type": "application/json",
+                "accept-language": `${this.countryCode}-${this.countryCode.toUpperCase()}`,
+            },
+            body: JSON.stringify({
+                query: query,
+                variables: {
+                    pid: id,
+                    countryCodes: [this.countryCode]
+                }
+            })
+        }).then(this._formatData);
     };
 
     async connect() {
@@ -69,14 +89,21 @@ export class Farfetch {
         const term = terms[0];
         if (term?.type !== "Id") throw new Error("Invalid identifier");
 
-        const data = await fetch(`https://api.farfetch.net/v1/products/${term.value}`, {
-            headers: this._getHeaders(),
-            signal: params?.abortSignal
-        }).then(this._formatData);
+        const [data, extraData] = await Promise.all([
+            fetch(`https://api.farfetch.net/v1/products/${term.value}`, {
+                headers: this._getHeaders(),
+                signal: params?.abortSignal
+            }).then(this._formatData),
+            this._fetchExtraData(term.value)
+        ]);
 
         // so the product look alrady fetched
         data.fetched = true;
 
-        return new Product(this, data)
+        return new Product(this, {
+            ...data,
+            sizeGuide: extraData.data.product.sizeGuide,
+            fitting: extraData.data.variation.fitting
+        })
     };
 }
