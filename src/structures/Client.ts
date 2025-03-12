@@ -1,4 +1,4 @@
-import { IAuthToken, IFarfetchOptions, ISearchParams } from "../types/Client";
+import { IAuthToken, IFarfetchOptions, IGetPageParams, ISearchParams } from "../types/Client";
 import { Product } from "./Product";
 
 export class Farfetch {
@@ -45,8 +45,9 @@ export class Farfetch {
             headers: {
                 authorization: this.authToken.token_type + " " + this.authToken.access_token,
                 "ff-currency": this.currencyCode,
-                "ff-country": this.countryCode
+                "ff-country": this.countryCode,
             },
+            signal: params?.abortSignal
         }).then(this._formatData);
 
         // to ensure compatibility with details format
@@ -55,13 +56,14 @@ export class Farfetch {
         return data.products.entries.map(p => new Product(this, p));
     };
 
-    async get(identifier: string | number) {
+    async get(identifier: string | number, params?: IGetPageParams) {
         const data = await fetch(`https://api.farfetch.net/v1/products/${identifier}`, {
             headers: {
                 authorization: this.authToken.token_type + " " + this.authToken.access_token,
                 "ff-currency": this.currencyCode,
                 "ff-country": this.countryCode
-            }
+            },
+            signal: params?.abortSignal
         }).then(this._formatData);
 
         // so the product look alrady fetched

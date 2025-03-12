@@ -16,4 +16,9 @@ export interface ISearchParams {
     sort: string,
     imagesSizes: "300" | "500" | "600" | "700" | "800" | "1000" | "1920" | "2048",
     pageSize: string,
+    abortSignal?: AbortSignal
+}
+
+export interface IGetPageParams {
+    abortSignal?: AbortSignal
 }
