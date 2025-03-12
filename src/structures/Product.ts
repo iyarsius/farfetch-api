@@ -18,10 +18,10 @@ export class Product implements IProduct {
     compositions: IComposition[] = [];
     categories: ICategory[] = [];
     variants: IVariant[] = [];
-    care: ICare[];
-    colors: IColor[];
-    labels: ILabel[];
-    fitting: IFitting[]
+    care: ICare[] = [];
+    colors: IColor[] = [];
+    labels: ILabel[] = [];
+    fitting: IFitting[] = [];
 
     description?: string;
     season?: ISeason;
