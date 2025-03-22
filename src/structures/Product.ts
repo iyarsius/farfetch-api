@@ -1,5 +1,6 @@
 import { IBrand, ICare, ICategory, IComposition, ICustomization, ILabel, IImages, IPreferedMerchant, IProduct, ISeason, IColor, IVariant, IProductDetails, ISizeGuide, IFitting } from "../types/Product";
 import { Farfetch } from "./Client";
+import { query } from "../queries/GetRecommendedProductCatalog";
 
 export class Product implements IProduct {
     id: number;
@@ -61,5 +62,26 @@ export class Product implements IProduct {
             sizeGuide: extraData.data.product.sizeGuide,
             fitting: extraData.data.variation.fitting || []
         });
+    };
+
+    async getVariations() {
+        const data = await fetch(`https://marketplace.farfetch.net/graphql`, {
+            method: "POST",
+            headers: {
+                ...this.client._getHeaders(),
+                "x-request-operation-name": "myRecommendedProductCatalog",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                query: query,
+                variables: {
+                    styleID: this.styleId,
+                    pid: this.id
+                }
+            })
+        }).then(this.client._formatData);
+
+        const variationsIDs = data.data.myRecommendedProductCatalog.edges.map((edge: any) => edge.node.id);
+        return await Promise.all( variationsIDs.map((id: string) => this.client.get(id)));
     }
 }
