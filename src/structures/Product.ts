@@ -64,7 +64,7 @@ export class Product implements IProduct {
         });
     };
 
-    async getVariations() {
+    async getVariations(): Promise<Product[]> {
         const data = await fetch(`https://marketplace.farfetch.net/graphql`, {
             method: "POST",
             headers: {
