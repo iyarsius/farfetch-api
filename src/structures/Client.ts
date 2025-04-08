@@ -89,14 +89,15 @@ export class Farfetch {
         }).then(this._formatData);
 
         const term = terms[0];
-        if (term?.type !== "Id") throw new Error("Invalid identifier");
+        
+        if (term?.type === "Id") identifier = term.value;
 
         const [data, extraData] = await Promise.all([
-            fetch(`https://api.farfetch.net/v1/products/${term.value}`, {
+            fetch(`https://api.farfetch.net/v1/products/${Number(identifier)}`, {
                 headers: this._getHeaders(),
                 signal: params?.abortSignal
             }).then(this._formatData),
-            this._fetchExtraData(term.value)
+            this._fetchExtraData(Number(identifier))
         ]);
 
         // so the product look alrady fetched
